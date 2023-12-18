@@ -11,7 +11,8 @@ Servo nozzleRotateServo;
 
 RF24 radio(7, 8);
 
-
+int primary_fan = 13;
+int secodnary_fan = 7;
 
 const byte address[6] = "00001";
 
@@ -40,7 +41,8 @@ void loop() {
   if (radio.available()) {
     radio.read(&data, sizeof(TransferData));
     // REST OF THE RECIEVER CODE
-
+    int x = 0; //put val here
+    rotateNozzle(data.servo_direction_right, x);
   }
 }
 
@@ -62,3 +64,12 @@ void rotateNozzle(int direction, int speed){
       break;
   }
 }
+
+
+void changeFanState(bool mainFan, bool secondaryFan){
+  digitalWrite(primary_fan, mainFan);
+  digitalWrite(secondary_fan,secondaryFan);
+}
+
+
+
