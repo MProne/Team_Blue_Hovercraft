@@ -8,6 +8,7 @@
 #define NOZZLE_IDLE_POS 90
 
 Servo nozzleRotateServo;
+Servo rotateServo;
 
 RF24 radio(7, 8);
 
@@ -27,6 +28,7 @@ struct TransferData {
 TransferData data; // Create an empty Var
 
 void setup() {
+  rotateServo.attach(8);
   Serial.begin(9600);
   radio.begin();
   radio.openReadingPipe(0,address);
@@ -43,6 +45,8 @@ void loop() {
     // REST OF THE RECIEVER CODE
     int x = 0; //put val here
     rotateNozzle(data.servo_direction_right, x);
+    changeFanState(data.fan1_state, data.fan2_state);
+    changeSwervoAngle(data.throttle);
   }
 }
 
@@ -71,5 +75,6 @@ void changeFanState(bool mainFan, bool secondaryFan){
   digitalWrite(secondary_fan,secondaryFan);
 }
 
-
-
+void changeServoAngle(float perc){
+    rotateSwervo.write(round(perc * 180));
+}
